@@ -18,7 +18,7 @@ webPreferences: {
   
     );
   
-    win.loadFile(path.join(__dirname, '../frontend/index.html')); //carrega o Html pelo caminho correto
+    win.loadFile(path.join(__dirname, '../frontend/login.html')); //carrega o Html pelo caminho correto
   }
 
   app.whenReady().then(() => {
