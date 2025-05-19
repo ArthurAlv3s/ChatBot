@@ -11,17 +11,16 @@
   <div class="auth-container">
     <header class="auth-header">ChatBOL - Login</header>
     <div class="auth-box">
-      <form id="login-form" class="auth-form">
-        <h3>Login</h3>
-        <input type="email" id="email" placeholder="Digite seu e-mail" required />
-        <input type="password" id="password" placeholder="Digite sua senha" required />
-        <button type="submit">Entrar</button>
-        <p>Não tem uma conta? <a href="./registro.html">Registre-se</a></p>
-      </form>
-      </form>
+      <h3>Login</h3>
+      <input type="email" id="email" placeholder="Digite seu e-mail" required />
+      <input type="password" id="password" placeholder="Digite sua senha" required />
+      <button type="submit" id="entrada">Entrar</button>
+      <p>Não tem uma conta? <a href="./registro.html">Registre-se</a></p>
+      <p id="login-msg" class="message"></p>
+      <div id="error-message" style="color: red;"></div>
     </div>
   </div>
-  
-  <script src="auth.js"></script>
+
+  <script src="../BackEnd/auth.js"></script>
 </body>
 </html>

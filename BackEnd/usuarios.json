@@ -1,0 +1,14 @@
+[
+  {
+    "email": "user1@example.com",
+    "passwordHash": "$2a$10$0E7IHgEvV7BPQOR5o8zwXOsFnl7FhXUnw10FZCZs2zZ8GfIAqx/ia"
+  },
+  {
+    "email": "user2@example.com",
+    "passwordHash": "$2a$10$zOjfXqH9vCw7A0P03wceh2yV7TXn3DpBzZToF7zXW8OsFG9BfwiUq"
+  },
+  {
+    "email": "cassio@22",
+    "passwordHash": "$2b$10$eWTGVoLjs0pn.u9MhBSHq.Si.Cj/aiP6pRAnMpS.iEjP4Kr2wjg5."
+  }
+]
