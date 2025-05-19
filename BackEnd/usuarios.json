@@ -10,5 +10,9 @@
   {
     "email": "cassio@22",
     "passwordHash": "$2b$10$eWTGVoLjs0pn.u9MhBSHq.Si.Cj/aiP6pRAnMpS.iEjP4Kr2wjg5."
+  },
+  {
+    "email": "pietropiba@gmail.com",
+    "passwordHash": "$2b$10$GeevKFlgRLPAEWWhfKBFIuAykwr1dS2Jt8RY5bp2wTsbFI/yt4RAi"
   }
 ]
