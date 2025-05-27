@@ -101,11 +101,6 @@ ipcMain.handle('responderPergunta', async (event, pergunta) => {
   }
 });
 
-// Exemplo de outro canal para enviar mensagem, você pode ajustar ou remover se não usar
 ipcMain.handle('enviar-mensagem', async (event, msg) => {
-  // Aqui você pode implementar o que quiser para processar a mensagem
-  // Exemplo:
-  // const resposta = await processarMensagem(msg);
-  // return resposta;
   return "Resposta não implementada ainda";
 });

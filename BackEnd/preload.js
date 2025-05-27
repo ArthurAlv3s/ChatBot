@@ -11,7 +11,6 @@ contextBridge.exposeInMainWorld('api', {
     ipcRenderer.invoke('classificarPergunta', pergunta),
 });
 
-// Se você não usar o 'electronAPI.enviarMensagem', pode remover abaixo
 contextBridge.exposeInMainWorld('electronAPI', {
   enviarMensagem: (msg) => ipcRenderer.invoke('enviar-mensagem', msg),
 });

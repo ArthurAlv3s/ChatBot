@@ -10,5 +10,17 @@
   {
     "email": "cassio@22",
     "passwordHash": "$2b$10$eWTGVoLjs0pn.u9MhBSHq.Si.Cj/aiP6pRAnMpS.iEjP4Kr2wjg5."
+  },
+  {
+    "email": "Lennon@gmail.com",
+    "passwordHash": "$2b$10$MeC/BUKepksCmNFYq8ZrHeK3L7TaBMmhOtHvDJwHYDv.R3rhla2XK"
+  },
+  {
+    "email": "mateus@gmail",
+    "passwordHash": "$2b$10$wcK8C.dM1XRJs8GQAOf/JuSjSk9FhT5WGzkNQ6iBWrdTUge9KggdS"
+  },
+  {
+    "email": "yuri@gmail.com",
+    "passwordHash": "$2b$10$zt9G2TAUoi68IMOQfcf6E.okHipkg4lQQf26wn3QMemTKAPTd679."
   }
 ]
