@@ -2,9 +2,13 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
+require('dotenv').config();
+const API_KEY = process.env.API_KEY;
 
-// Importa os métodos do Gemini
-const { classificarPergunta, responderPergunta } = require('./gemini');
+
+// Gemini e banco de dados
+const { classificarPergunta, responderPergunta: responderGemini } = require('./gemini');
+const knex = require('./knexfile');
 
 const usersFile = path.join(__dirname, 'usuarios.json');
 let tentativas = {};
@@ -33,6 +37,7 @@ app.on('window-all-closed', () => {
 });
 
 // ========== LOGIN ==========
+
 ipcMain.handle('login', async (event, { username, senha }) => {
   if (!tentativas[username]) tentativas[username] = 0;
 
@@ -62,6 +67,7 @@ ipcMain.handle('login', async (event, { username, senha }) => {
 });
 
 // ========== REGISTRO ==========
+
 ipcMain.handle('registrar', async (event, { username, senha }) => {
   let users = [];
   if (fs.existsSync(usersFile)) {
@@ -80,7 +86,8 @@ ipcMain.handle('registrar', async (event, { username, senha }) => {
   return { sucesso: true };
 });
 
-// ========== GEMINI ==========
+// ========== CLASSIFICAR PERGUNTA ==========
+
 ipcMain.handle('classificarPergunta', async (event, pergunta) => {
   try {
     const categoria = await classificarPergunta(pergunta);
@@ -91,16 +98,49 @@ ipcMain.handle('classificarPergunta', async (event, pergunta) => {
   }
 });
 
+// ========== RESPONDER PERGUNTA COM VERIFICAÇÃO NO BANCO ==========
+
 ipcMain.handle('responderPergunta', async (event, pergunta) => {
   try {
-    const resposta = await responderPergunta(pergunta);
-    return resposta;
+    // Verifica se a pergunta já existe no banco
+    console.log('[INFO] Verificando pergunta no banco:', pergunta);
+
+    const consultaExistente = await knex('queries')
+      .where('user_query', pergunta)
+      .first();
+
+    if (consultaExistente) {
+      console.log('[INFO] Resposta encontrada no banco de dados.');
+      return consultaExistente.response;
+    }
+
+    // Gera resposta com Gemini
+    console.log('[INFO] Pergunta não encontrada no banco, gerando resposta...');
+    const respostaGerada = await responderGemini(pergunta);
+
+    // Salva no banco
+    console.log('[INFO] Salvando nova resposta no banco...');
+    await knex('queries').insert({
+      user_query: pergunta,
+      response: respostaGerada
+    });
+
+    console.log('[OK] Resposta salva com sucesso no banco.');
+
+    return respostaGerada;
   } catch (err) {
-    console.error('Erro ao responder pergunta:', err);
+    console.error('[ERRO] Falha ao responder pergunta:', err);
     return 'Erro ao gerar resposta.';
   }
 });
 
+// Placeholder para função futura
 ipcMain.handle('enviar-mensagem', async (event, msg) => {
   return "Resposta não implementada ainda";
+});
+const cron = require('node-cron');
+
+cron.schedule('0 0 * * *', () => {
+  console.log('Atualizando dados dos times...');
+  inserirTimes();
 });

@@ -12,7 +12,6 @@
     "passwordHash": "$2b$10$eWTGVoLjs0pn.u9MhBSHq.Si.Cj/aiP6pRAnMpS.iEjP4Kr2wjg5."
   },
   {
-<<<<<<< HEAD
     "email": "Lennon@gmail.com",
     "passwordHash": "$2b$10$MeC/BUKepksCmNFYq8ZrHeK3L7TaBMmhOtHvDJwHYDv.R3rhla2XK"
   },
@@ -23,9 +22,5 @@
   {
     "email": "yuri@gmail.com",
     "passwordHash": "$2b$10$zt9G2TAUoi68IMOQfcf6E.okHipkg4lQQf26wn3QMemTKAPTd679."
-=======
-    "email": "pietropiba@gmail.com",
-    "passwordHash": "$2b$10$GeevKFlgRLPAEWWhfKBFIuAykwr1dS2Jt8RY5bp2wTsbFI/yt4RAi"
->>>>>>> 4d03b004d94ae0a8d8513d7592fb10bd1d9c5091
   }
 ]
