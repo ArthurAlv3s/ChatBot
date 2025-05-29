@@ -3,12 +3,12 @@ const path = require('path');
 const fs = require('fs');
 const bcrypt = require('bcryptjs');
 require('dotenv').config();
-const API_KEY = process.env.API_KEY;
-
+const { API_KEY } = process.env;  // API Key do arquivo .env
 
 // Gemini e banco de dados
 const { classificarPergunta, responderPergunta: responderGemini } = require('./gemini');
 const knex = require('./knexfile');
+const { inserirTimes } = require('./futebolAPI');  // Importando a função de inserção de times
 
 const usersFile = path.join(__dirname, 'usuarios.json');
 let tentativas = {};
@@ -50,6 +50,24 @@ ipcMain.handle('login', async (event, { username, senha }) => {
     users = JSON.parse(fs.readFileSync(usersFile));
   }
 
+  // Verifica primeiro no banco de dados SQL
+  try {
+    const usuarioSQL = await knex('users').where('email', username).first();
+    if (usuarioSQL) {
+      const senhaCorreta = await bcrypt.compare(senha, usuarioSQL.password_hash);
+      if (senhaCorreta) {
+        tentativas[username] = 0;
+        return { sucesso: true };
+      } else {
+        tentativas[username]++;
+        return { sucesso: false, erro: 'Senha incorreta' };
+      }
+    }
+  } catch (err) {
+    console.error('Erro ao verificar login no banco de dados:', err);
+  }
+
+  // Se não encontrar no banco, verifica no arquivo JSON
   const user = users.find(u => u.email === username);
   if (!user) {
     tentativas[username]++;
@@ -69,21 +87,39 @@ ipcMain.handle('login', async (event, { username, senha }) => {
 // ========== REGISTRO ==========
 
 ipcMain.handle('registrar', async (event, { username, senha }) => {
-  let users = [];
-  if (fs.existsSync(usersFile)) {
-    users = JSON.parse(fs.readFileSync(usersFile));
+  try {
+    // Verifica se o email já está cadastrado no banco SQL
+    const usuarioExistenteSQL = await knex('users').where('email', username).first();
+    if (usuarioExistenteSQL) {
+      return { sucesso: false, erro: 'Usuário já existe no banco de dados' };
+    }
+
+    // Verifica no arquivo JSON se o usuário já existe
+    let users = [];
+    if (fs.existsSync(usersFile)) {
+      users = JSON.parse(fs.readFileSync(usersFile));
+    }
+    const existente = users.find(u => u.email === username);
+    if (existente) {
+      return { sucesso: false, erro: 'Usuário já existe no arquivo JSON' };
+    }
+
+    // Gera o hash da senha e registra no banco SQL
+    const hash = await bcrypt.hash(senha, 10);
+    await knex('users').insert({
+      email: username,
+      password_hash: hash,
+    });
+
+    // Registra também no arquivo JSON
+    users.push({ email: username, passwordHash: hash });
+    fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
+
+    return { sucesso: true };
+  } catch (err) {
+    console.error('Erro ao registrar usuário:', err);
+    return { sucesso: false, erro: 'Erro ao registrar usuário' };
   }
-
-  const existente = users.find(u => u.email === username);
-  if (existente) {
-    return { sucesso: false, erro: 'Usuário já existe' };
-  }
-
-  const hash = await bcrypt.hash(senha, 10);
-  users.push({ email: username, passwordHash: hash });
-  fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
-
-  return { sucesso: true };
 });
 
 // ========== CLASSIFICAR PERGUNTA ==========
@@ -102,7 +138,6 @@ ipcMain.handle('classificarPergunta', async (event, pergunta) => {
 
 ipcMain.handle('responderPergunta', async (event, pergunta) => {
   try {
-    // Verifica se a pergunta já existe no banco
     console.log('[INFO] Verificando pergunta no banco:', pergunta);
 
     const consultaExistente = await knex('queries')
@@ -114,11 +149,9 @@ ipcMain.handle('responderPergunta', async (event, pergunta) => {
       return consultaExistente.response;
     }
 
-    // Gera resposta com Gemini
     console.log('[INFO] Pergunta não encontrada no banco, gerando resposta...');
     const respostaGerada = await responderGemini(pergunta);
 
-    // Salva no banco
     console.log('[INFO] Salvando nova resposta no banco...');
     await knex('queries').insert({
       user_query: pergunta,
@@ -134,13 +167,12 @@ ipcMain.handle('responderPergunta', async (event, pergunta) => {
   }
 });
 
-// Placeholder para função futura
-ipcMain.handle('enviar-mensagem', async (event, msg) => {
-  return "Resposta não implementada ainda";
-});
+// ========== Atualizar Dados dos Times Periodicamente ==========
+
 const cron = require('node-cron');
 
+// Atualizando os times a cada dia à meia-noite
 cron.schedule('0 0 * * *', () => {
-  console.log('Atualizando dados dos times...');
-  inserirTimes();
+  console.log('[INFO] Atualizando dados dos times...');
+  inserirTimes(knex);  // Chama a função para inserir os dados dos times
 });

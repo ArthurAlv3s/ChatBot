@@ -1,5 +1,4 @@
 const knex = require('knex');
-
 const knexdb = knex({
   client: 'mysql2',
   connection: {

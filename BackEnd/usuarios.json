@@ -22,5 +22,17 @@
   {
     "email": "yuri@gmail.com",
     "passwordHash": "$2b$10$zt9G2TAUoi68IMOQfcf6E.okHipkg4lQQf26wn3QMemTKAPTd679."
+  },
+  {
+    "email": "vrt@222",
+    "passwordHash": "$2b$10$aYHAidDr8WuOrVtl1C.uJuNxHzknvnLDDoMWLw4qiSe3Phtwmw5Ja"
+  },
+  {
+    "email": "vr3@22",
+    "passwordHash": "$2b$10$rLNEnw03OsVqA2vjQVrb/eBA8VvxqDahCLx4hhZUl7NG1BJ/bOAbK"
+  },
+  {
+    "email": "lennon22@gmail.com",
+    "passwordHash": "$2b$10$pL2o6ngsXtE.NOL5wcQf3eJydvr4E0s6ky2MZ.e6Ich48e6k1fuvO"
   }
 ]

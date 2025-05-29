@@ -35,18 +35,30 @@ red_cards int
 create table statistics (
 stat_id serial primary key,
 game_id int references games(game_id),
-player_id int references player(player_id),
+player_id int references players(player_id),
 goals int,
 assists int,
 minutes_played int
 );
 
-create table queries (
-query_id serial primary key,
-user_query text,
-response text,
-timestamp timestamp default current_timestamp
+CREATE TABLE IF NOT EXISTS queries (
+  query_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_query TEXT,
+  response TEXT,
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE users (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(255) NOT NULL,
+  password_hash VARCHAR(255) NOT NULL,
+  UNIQUE(email)
+);
+
+
 
 INSERT INTO games (home_team, away_team, home_score, away_score, game_date, status)
 VALUES ('Team A', 'Team B', 2, 1, '2025-05-28 20:00:00', 'finished');
+
+SELECT * FROM users;
+drop database chatbot
