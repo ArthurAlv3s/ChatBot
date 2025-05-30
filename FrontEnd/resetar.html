@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redefinir Senha - ChatBol</title>
+  <link rel="stylesheet" href="registro.css" />
+</head>
+<body>
+  <div class="auth-container">
+    <header class="auth-header">Redefinir Senha</header>
+    <div class="auth-box">
+      <h3>Digite seu e-mail, o código recebido e a nova senha</h3>
+      <input type="email" id="email" placeholder="Seu e-mail" />
+      <input type="text" id="token" placeholder="Código recebido por e-mail" />
+      <input type="password" id="novaSenha" placeholder="Nova senha" />
+      <button id="confirmar">Confirmar</button>
+      <p id="msg" class="message"></p>
+    </div>
+  </div>
+
+  <script src="../BackEnd/resetar.js"></script>
+</body>
+</html>

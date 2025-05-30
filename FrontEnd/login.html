@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login / Registro - ChatBol</title>
   <link rel="stylesheet" href="login.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
   <div class="auth-container">
@@ -17,9 +17,16 @@
       <button type="submit" id="entrada">Entrar</button>
       <p>Não tem uma conta? <a href="./registro.html">Registre-se</a></p>
       <p id="login-msg" class="message"></p>
+      <button id="recuperar-senha">Recuperar Senha</button>
       <div id="error-message" style="color: red;"></div>
     </div>
   </div>
+
+  <script>
+    document.getElementById('recuperar-senha').addEventListener('click', () => {
+  window.location.href = './recuperar.html'; // alterar para recuperar.html, não resetar.html
+});
+  </script>
 
   <script src="../BackEnd/auth.js"></script>
 </body>

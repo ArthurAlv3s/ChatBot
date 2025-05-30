@@ -54,6 +54,17 @@ CREATE TABLE users (
   password_hash VARCHAR(255) NOT NULL,
   UNIQUE(email)
 );
+CREATE TABLE password_resets (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  email VARCHAR(255) NOT NULL,
+  token VARCHAR(255) NOT NULL,
+  expires_at DATETIME NOT NULL
+);
+CREATE TABLE IF NOT EXISTS password_resets (
+  email VARCHAR(255) NOT NULL,
+  token VARCHAR(255) NOT NULL,
+  expires_at DATETIME NOT NULL
+);
 
 
 
@@ -61,4 +72,7 @@ INSERT INTO games (home_team, away_team, home_score, away_score, game_date, stat
 VALUES ('Team A', 'Team B', 2, 1, '2025-05-28 20:00:00', 'finished');
 
 SELECT * FROM users;
-drop database chatbot
+ALTER TABLE users
+ADD COLUMN codigo_2fa VARCHAR(10),
+ADD COLUMN expira_em DATETIME;
+drop database chatbot;

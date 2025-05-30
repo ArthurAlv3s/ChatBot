@@ -34,5 +34,13 @@
   {
     "email": "lennon22@gmail.com",
     "passwordHash": "$2b$10$pL2o6ngsXtE.NOL5wcQf3eJydvr4E0s6ky2MZ.e6Ich48e6k1fuvO"
+  },
+  {
+    "email": "a",
+    "passwordHash": "$2b$10$nMxocjdvMBADD00aiI1ARurIdCc/j7eXAArpd8889PoM2VzEVlHyi"
+  },
+  {
+    "email": "cassio",
+    "passwordHash": "$2b$10$V1eud8NIx71SvSnBobgYduyScF/z6s.WIYRmQjszPwFMHqeqOTxS."
   }
 ]

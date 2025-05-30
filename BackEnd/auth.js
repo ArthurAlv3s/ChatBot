@@ -1,4 +1,6 @@
-// Registro
+// auth.js
+
+// Registro com 2FA
 if (document.getElementById('enviar')) {
   document.getElementById('enviar').onclick = async () => {
     const username = document.getElementById('new-email').value;
@@ -9,15 +11,21 @@ if (document.getElementById('enviar')) {
       return;
     }
 
-    const resposta = await window.api.registrar({ username, senha });
+    // Tenta registrar o usuário
+    const respostaRegistro = await window.api.registrar({ username, senha });
 
-    if (resposta.sucesso) {
-      document.getElementById('reg-msg').innerText = 'Registrado com sucesso!';
-      setTimeout(() => {
-        window.location.href = '../FrontEnd/index.html';
-      }, 1000);
+    if (respostaRegistro.sucesso) {
+      // Envia o código 2FA para o email do usuário
+      const resposta2FA = await window.api.enviarCodigo2FA(username);
+
+      if (resposta2FA.sucesso) {
+        // Redireciona para a página de verificação, passando o email pela URL
+        window.location.href = `verificar.html?email=${encodeURIComponent(username)}`;
+      } else {
+        document.getElementById('reg-msg').innerText = 'Erro ao enviar código 2FA.';
+      }
     } else {
-      document.getElementById('reg-msg').innerText = resposta.erro;
+      document.getElementById('reg-msg').innerText = respostaRegistro.erro;
     }
   };
 }
