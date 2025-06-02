@@ -5,7 +5,7 @@ const knexdb = knex({
     host: '127.0.0.1',
     port: 3306,
     user: 'root',
-    password: 'cassio220807',
+    password: 'senacrs',
     database: 'chatbot'
   }
 });

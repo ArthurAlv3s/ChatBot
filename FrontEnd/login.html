@@ -14,10 +14,12 @@
       <h3>Login</h3>
       <input type="email" id="email" placeholder="Digite seu e-mail" required />
       <input type="password" id="password" placeholder="Digite sua senha" required />
-      <button type="submit" id="entrada">Entrar</button>
-      <p>Não tem uma conta? <a href="./registro.html">Registre-se</a></p>
+      <button type="submit" id="entrada" class="Entrar">Entrar</button>
+      <div class="es">
+        <button id="recuperar-senha">Recuperar Senha</button>
+        <p class="nr">Não tem uma conta? <a href="./registro.html">Registre-se</a></p>
+      </div>
       <p id="login-msg" class="message"></p>
-      <button id="recuperar-senha">Recuperar Senha</button>
       <div id="error-message" style="color: red;"></div>
     </div>
   </div>
@@ -31,3 +33,4 @@
   <script src="../BackEnd/auth.js"></script>
 </body>
 </html>
+

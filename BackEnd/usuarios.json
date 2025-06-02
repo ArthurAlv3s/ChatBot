@@ -42,5 +42,21 @@
   {
     "email": "cassio",
     "passwordHash": "$2b$10$V1eud8NIx71SvSnBobgYduyScF/z6s.WIYRmQjszPwFMHqeqOTxS."
+  },
+  {
+    "email": "pietropiba@gmil.com",
+    "passwordHash": "$2b$10$7A0JaHCFpAkNyo/juG72weOoi.fjf6kHG4xml/KGitX9zncJByRmK"
+  },
+  {
+    "email": "dmouraanhanguera@gmail.com",
+    "passwordHash": "$2b$10$dRSX0yGrDuxLWJOEEIKR5uZVl1LBqrCLIh6HZV6vnzGpX5vO5Y2LS"
+  },
+  {
+    "email": "pietropiba@gmail.com",
+    "passwordHash": "$2b$10$2NUTqZaF1/uKEM5AX4ZNzu34eVIOtYj0B8wAvdkHpeTjJ1s18mvYe"
+  },
+  {
+    "email": "guerreirogamer08@gmail.com",
+    "passwordHash": "$2b$10$HUR4zKhdWnf1EhSyC4YbrOhIQvmruS5bLSDy2YxU6aCpyFoxD8SCq"
   }
 ]
