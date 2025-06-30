@@ -104,24 +104,12 @@ ipcMain.handle('registrar', async (event, { username, senha }) => {
       return { sucesso: false, erro: 'Usuário já existe no banco de dados' };
     }
 
-    // Verifica no arquivo JSON
-    let users = [];
-    if (fs.existsSync(usersFile)) {
-      users = JSON.parse(fs.readFileSync(usersFile));
-    }
-    const existente = users.find(u => u.email === username);
-    if (existente) {
-      return { sucesso: false, erro: 'Usuário já existe no arquivo JSON' };
-    }
-
+    
     const hash = await bcrypt.hash(senha, 10);
 
     // Insere no banco SQL
     await knex('users').insert({ email: username, password_hash: hash });
 
-    // Insere no arquivo JSON
-    users.push({ email: username, passwordHash: hash });
-    fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
 
     return { sucesso: true };
   } catch (err) {
