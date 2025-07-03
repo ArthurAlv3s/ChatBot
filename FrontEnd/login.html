@@ -9,7 +9,12 @@
 </head>
 <body>
   <div class="auth-container">
-    <header class="auth-header">ChatBOL - Login</header>
+    <header class="auth-header">
+      <span style="vertical-align: middle; display: inline-flex; align-items: center;">
+        <img src="img/icon.png" alt="logo" style="width: 60px; height: 60px; position: relative; right: 100px;">
+        ChatBOL - Login
+      </span>
+    </header>
     <div class="auth-box">
       <h3>Login</h3>
       <input type="email" id="email" placeholder="Digite seu e-mail" required />
@@ -20,7 +25,8 @@
         <p class="nr">Não tem uma conta? <a href="./registro.html">Registre-se</a></p>
       </div>
       <p id="login-msg" class="message"></p>
-      <div id="error-message" style="color: red;"></div>
+      <p id="success-message" class="message"></p>
+      <div id="error-message"></div>
     </div>
   </div>
 

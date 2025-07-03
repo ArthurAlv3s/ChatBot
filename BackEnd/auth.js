@@ -32,12 +32,13 @@ if (document.getElementById('enviar')) {
 
 // Login
 if (document.getElementById('entrada')) {
-  document.getElementById('entrada').onclick = async () => {
+  const loginHandler = async () => {
     const username = document.getElementById('email').value;
     const senha = document.getElementById('password').value;
 
     if (!username || !senha) {
       document.getElementById('login-msg').innerText = 'Preencha todos os campos.';
+      document.getElementById('login-msg').style.color = 'red';
       return;
     }
 
@@ -45,11 +46,27 @@ if (document.getElementById('entrada')) {
 
     if (resposta.sucesso) {
       document.getElementById('login-msg').innerText = 'Login bem-sucedido!';
+      document.getElementById('login-msg').style.color = 'green';
       setTimeout(() => {
         window.location.href = '../FrontEnd/index.html';
       }, 1000);
     } else {
       document.getElementById('login-msg').innerText = resposta.erro;
+      document.getElementById('login-msg').style.color = 'red';
     }
   };
+
+  document.getElementById('entrada').onclick = loginHandler;
+
+  // Permitir login com Enter nos campos de email e senha
+  ['email', 'password'].forEach(id => {
+    const input = document.getElementById(id);
+    if (input) {
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          loginHandler();
+        }
+      });
+    }
+  });
 }
