@@ -1,127 +1,133 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
+/* Reset e base */
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
 }
 
-body {
-  font-family: 'Inter', sans-serif;
-  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-  height: 100vh;
+body, html {
+  height: 100%;
+  background-color: #0d1117;
+  color: #f0f0f0;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #333;
 }
 
+/* Container principal */
 .auth-container {
+  background-color: #161b22;
+  padding: 40px 48px;
+  border-radius: 12px;
   width: 100%;
-  max-width: 450px;
-  height: fit-content;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  max-width: 420px;
+  box-shadow: 0 0 20px rgba(225, 178, 14, 0.5);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  gap: 24px;
 }
 
-.auth-header i{
-  font-size: 20px;
-}
-
+/* Header com logo */
 .auth-header {
+  font-weight: 700;
+  font-size: 1.6rem;
+  color: #e1b20e;
   display: flex;
-  justify-content: space-between;
-  background: linear-gradient(to right, #007f5f, #38b000);
-  font-size: 10px;
-  color: white;
-  font-weight: 600;
-  text-align: center;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  align-items: center;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 10px;
 }
 
-.auth-header button{
-  background: none;
-  border: none;
-  font-size: 20px;
-  color: white;
+.auth-header img {
+  width: 60px;
+  height: 60px;
+  position: relative;
+  right: 0;
 }
 
+/* Caixa do conteúdo */
 .auth-box {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
-  background-color: #f4f6f8;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 18px;
 }
 
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.auth-container input[type="email"],
-.auth-container input[type="password"] {
-  padding: 12px 16px;
-  border-radius: 30px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  outline: none;
-  transition: 0.2s border-color;
-}
-
-.auth-container input[type="email"]:focus,
-.auth-container input[type="password"]:focus {
-  border-color: #38b000;
-}
-
-#enviar {
-  padding: 12px 18px;
-  font-size: 16px;
-  background-color: #38b000;
-  border: none;
-  border-radius: 50px;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-#enviar:hover {
-  background-color: #70e000;
-}
-
-.enviar{
-  padding: 12px 18px;
-  font-size: 16px;
-  background-color: #38b000;
-  border: none;
-  border-radius: 50px;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.enviar:hover{
-  background-color: #70e000;
-}
-
-p {
+/* Título */
+.auth-box h3 {
+  font-weight: 600;
+  font-size: 1.4rem;
+  color: #e1b20e;
   text-align: center;
-  font-size: 14px;
 }
 
-a {
-  color: #38b000;
+/* Inputs */
+.auth-box input {
+  padding: 14px 18px;
+  border-radius: 8px;
+  border: none;
+  background-color: #21262d;
+  color: #f0f0f0;
+  font-size: 1rem;
+  outline: none;
+  transition: background-color 0.3s;
+}
+
+.auth-box input::placeholder {
+  color: #999;
+}
+
+.auth-box input:focus {
+  background-color: #30363d;
+}
+
+/* Botão registrar */
+.auth-box button#enviar {
+  background-color: #e1b20e;
+  color: #000;
+  font-weight: 700;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.auth-box button#enviar:hover {
+  background-color: #f4c430;
+}
+
+/* Link para login */
+.auth-box p {
+  font-size: 0.9rem;
+  color: #8b949e;
+  text-align: center;
+}
+
+.auth-box p a {
+  color: #e1b20e;
   text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
 }
 
-a:hover {
+.auth-box p a:hover {
+  color: #f4c430;
   text-decoration: underline;
+}
+
+/* Mensagem de erro/sucesso */
+.message {
+  min-height: 24px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-align: center;
+  color: #f44336; /* vermelho por padrão */
+}
+
+/* Você pode alterar a cor via JS para verde em caso de sucesso */
+.message.sucesso {
+  color: #4caf50;
 }

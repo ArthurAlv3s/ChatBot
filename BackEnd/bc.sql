@@ -65,7 +65,15 @@ CREATE TABLE IF NOT EXISTS password_resets (
   token VARCHAR(255) NOT NULL,
   expires_at DATETIME NOT NULL
 );
-
+CREATE TABLE messages (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_email VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  sender ENUM('user', 'bot') NOT NULL,
+  timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_email) REFERENCES users(email)
+);
+ALTER TABLE messages ADD COLUMN favorita TINYINT DEFAULT 0;
 
 
 INSERT INTO games (home_team, away_team, home_score, away_score, game_date, status)

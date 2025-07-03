@@ -1,0 +1,95 @@
+/* recuperar.css */
+
+/* Fonte padrão */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background-color: #0d1117;
+  color: #c9d1d9;
+}
+
+/* Container principal */
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+/* Cabeçalho */
+.auth-header {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #e1b20e;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* Caixa do formulário */
+.auth-box {
+  background-color: #161b22;
+  padding: 32px 40px;
+  border-radius: 12px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 0 15px rgba(225, 178, 14, 0.5);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Título */
+.auth-box h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  text-align: center;
+  color: #f0f0f0;
+}
+
+/* Campo de entrada */
+.auth-box input[type="email"] {
+  padding: 12px 16px;
+  border-radius: 8px;
+  border: none;
+  background-color: #21262d;
+  color: #f0f0f0;
+  font-size: 1rem;
+  outline: none;
+  transition: background-color 0.3s;
+}
+
+.auth-box input::placeholder {
+  color: #999;
+}
+
+.auth-box input:focus {
+  background-color: #30363d;
+}
+
+/* Botão */
+.auth-box .enviar {
+  background-color: #e1b20e;
+  border: none;
+  padding: 14px 0;
+  border-radius: 8px;
+  color: #000;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.auth-box .enviar:hover {
+  background-color: #f4c430;
+}
+
+/* Mensagem */
+.message {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #8b949e;
+  min-height: 20px;
+}

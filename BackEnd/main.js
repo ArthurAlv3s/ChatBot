@@ -117,6 +117,35 @@ ipcMain.handle('registrar', async (event, { username, senha }) => {
     return { sucesso: false, erro: 'Erro ao registrar usuário' };
   }
 });
+// ========== salvar mensagens ===============
+ipcMain.handle('salvarMensagem', async (event, mensagem) => {
+  try {
+    await knex('messages').insert({
+      user_email: mensagem.email,
+      content: mensagem.content,
+      sender: mensagem.sender,
+      favorita: mensagem.favorita || 0,
+      timestamp: new Date(),
+    });
+    return { sucesso: true };
+  } catch (err) {
+    console.error('Erro ao salvar mensagem:', err);
+    return { sucesso: false, erro: 'Erro ao salvar mensagem' };
+  }
+});
+
+// Buscar mensagens anteriores
+ipcMain.handle('getMensagensPorEmail', async (event, email) => {
+  try {
+    const mensagens = await knex('messages')
+      .where('user_email', email)
+      .orderBy('timestamp', 'asc');
+    return mensagens;
+  } catch (err) {
+    console.error('[ERRO] Ao buscar mensagens:', err);
+    return [];
+  }
+});
 
 // ========== 2FA ==========
 function gerarCodigo() {

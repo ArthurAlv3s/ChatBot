@@ -1,145 +1,134 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: Arial, Helvetica, sans-serif;
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-  background: linear-gradient(-50deg, #0f2027, #203a43, #39535e, #52717e);
-  background-size: 400% 400%;
-  animation: gradientBG 10s ease infinite;
-  height: 100vh;
+/* Container da tela de login */
+.login-container {
+  flex: 1;
+  background-color: #0d1117;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #333;
+  height: 100vh;
 }
 
-.auth-container {
+/* Caixa central do login */
+.login-box {
+  background-color: #161b22;
+  padding: 32px 40px;
+  border-radius: 12px;
   width: 100%;
-  max-width: 450px;
-  height: fit-content;
-  background-color: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  max-width: 400px;
+  box-shadow: 0 0 15px rgba(225, 178, 14, 0.5);
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  gap: 24px;
 }
 
-.auth-header {
-  background: linear-gradient(to right, #38b000, #70e000);
-  color: rgb(255, 255, 255);
-  font-size: 22px;
+/* Logo no topo da tela de login */
+.login-box .logo {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #e1b20e;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+}
+
+/* Formulário */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Labels */
+.login-form label {
+  color: #c9d1d9;
   font-weight: 600;
-  text-align: center;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  font-size: 0.9rem;
 }
 
-.auth-box {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
-  background-color: #f4f6f8;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.auth-container input[type="email"],
-.auth-container input[type="password"] {
+/* Inputs */
+.login-form input {
   padding: 12px 16px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  font-size: 14px;
-  outline: none;
-  transition: 0.2s border-color;
-}
-
-.auth-container input[type="email"]:focus,
-.auth-container input[type="password"]:focus {
-  border-color: #38b000;
-}
-.es{
-  display: flex;
-  justify-content: space-between;
-  margin-left: 10px;
-  margin-right: 10px;
-
-}
-.nr{
-  font-size: 12px;
-}
-
-#login-msg{
-  color: #b00000;
-  font-weight: bold;
-}
-
-#login-success {
-  color: #38b000;
-  font-weight: bold;
-}
-
-.Entrar {
-  padding: 12px 18px;
-  font-size: 16px;
-  background-color: #38b000;
+  border-radius: 8px;
   border: none;
-  border-radius: 10px;
-  color: white;
+  background-color: #21262d;
+  color: #f0f0f0;
+  font-size: 1rem;
+  outline: none;
+  transition: background-color 0.3s;
+}
+
+.login-form input::placeholder {
+  color: #999;
+}
+
+.login-form input:focus {
+  background-color: #30363d;
+}
+
+/* Botão de login */
+.btn-login {
+  background-color: #e1b20e;
+  border: none;
+  padding: 14px 0;
+  border-radius: 8px;
+  color: #000;
+  font-weight: 700;
+  font-size: 1.1rem;
   cursor: pointer;
   transition: background-color 0.3s;
 }
-#recuperar-senha{
+
+.btn-login:hover {
+  background-color: #f4c430;
+}
+
+/* Footer do login */
+.login-footer {
+  text-align: center;
+}
+
+.login-footer a {
+  color: #8b949e;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.login-footer a:hover {
+  color: #e1b20e;
+  text-decoration: underline;
+}
+
+
+/* Container da tela de login permanece igual */
+
+/* ...seu css atual... */
+
+/* Container dos botões extras */
+.login-links {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 1px;
+  flex-wrap: wrap;
+}
+
+/* Estilo dos botões como links */
+.btn-link {
   background: none;
   border: none;
-  font-size: 10 px;
-
-}
-#recuperar-senha:hover{
-  color: #38b000;
+  color: #e1b20e;
+  font-weight: 600;
   cursor: pointer;
-  text-decoration: underline;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.3s, color 0.3s;
+  font-size: 0.95rem;
 }
 
-.Entrar:hover {
-  background-color: #70e000;
+.btn-link:hover {
+  background-color: #f4c430;
+  color: #000;
 }
 
-p {
-  text-align: center;
-  font-size: 14px;
-}
-
-a {
-  color: #38b000;
-  text-decoration: none;
-}
-
-a:hover {
-  text-decoration: underline;
-}
-
-@keyframes gradientBG {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}

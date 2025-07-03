@@ -2,41 +2,59 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login / Registro - ChatBol</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ChatBol - Login</title>
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
   <link rel="stylesheet" href="login.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
 </head>
 <body>
-  <div class="auth-container">
-    <header class="auth-header">
-      <span style="vertical-align: middle; display: inline-flex; align-items: center;">
-        <img src="img/icon.png" alt="logo" style="width: 60px; height: 60px; position: relative; right: 100px;">
-        ChatBOL - Login
-      </span>
-    </header>
-    <div class="auth-box">
-      <h3>Login</h3>
-      <input type="email" id="email" placeholder="Digite seu e-mail" required />
-      <input type="password" id="password" placeholder="Digite sua senha" required />
-      <button type="submit" id="entrada" class="Entrar">Entrar</button>
-      <div class="es">
-        <button id="recuperar-senha">Recuperar Senha</button>
-        <p class="nr">Não tem uma conta? <a href="./registro.html">Registre-se</a></p>
+  <div class="login-container">
+    <div class="login-box">
+      <div class="logo">
+        <i class="bi bi-trophy-fill"></i> ChatBol
       </div>
-      <p id="login-msg" class="message"></p>
-      <p id="success-message" class="message"></p>
-      <div id="error-message"></div>
+      <form id="login-form" class="login-form" onsubmit="return false;">
+        <label for="email">E-mail</label>
+        <input type="email" id="email" placeholder="Seu e-mail" required />
+
+        <label for="password">Senha</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="Sua senha"
+          required
+          autocomplete="current-password"
+        />
+
+        <button id="entrada" type="submit" class="btn-login">Entrar</button>
+      </form>
+
+      <div id="login-msg"></div>
+
+      <div class="login-links">
+        <button id="btn-registrar" class="btn-link">Criar Conta</button>
+        <button id="btn-recuperar" class="btn-link">Recuperar Senha</button>
+      </div>
     </div>
   </div>
 
-  <script>
-    document.getElementById('recuperar-senha').addEventListener('click', () => {
-  window.location.href = './recuperar.html'; // alterar para recuperar.html, não resetar.html
-});
-  </script>
-
   <script src="../BackEnd/auth.js"></script>
+  <script>
+    document.getElementById('btn-registrar').onclick = () => {
+      window.location.href = '../frontend/registro.html';
+    };
+
+        document.getElementById('btn-recuperar').onclick = () => {
+      window.location.href = '../frontend/recuperar.html';
+    };
+
+  </script>
 </body>
 </html>
-

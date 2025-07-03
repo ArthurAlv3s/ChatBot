@@ -1,142 +1,155 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-
+/* RESET E BASE */
 * {
-  box-sizing: border-box;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 body {
   font-family: 'Inter', sans-serif;
-  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  background-color: #0d1117;
+  color: #f0f0f0;
   height: 100vh;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  color: #333;
-}
-
-.chat-container {
-  width: 100%;
-  max-width: 450px;
-  height: 600px;
-  background-color: #ffffff;
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  display: flex;
-  flex-direction: column;
   overflow: hidden;
 }
 
-.chat-header {
-  background: linear-gradient(to right, #007f5f, #38b000);
-  color: white;
-  font-size: 22px;
-  font-weight: 600;
-  text-align: center;
+.chatbol-container {
+  display: flex;
+  width: 100%;
+}
+
+/* SIDEBAR */
+aside {
+  width: 260px;
+  background-color: #161b22;
   padding: 20px;
   display: flex;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-  justify-content: space-between;
+  flex-direction: column;
+  gap: 24px;
+  border-right: 1px solid #30363d;
+  overflow-y: auto;
 }
 
-.chat-header i{
-    font-size: 25PX;
+.logo {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #e1b20e;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.aba{
-  display: none;
-  
-
+.logo i {
+  font-size: 1.5rem;
 }
 
-.chat-header h1{
-  font-size: 25px;
+.section-title {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: #8b949e;
+  margin-bottom: 6px;
 }
 
+.chat-entry {
+  padding: 10px 12px;
+  background-color: #21262d;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  color: #c9d1d9;
+  transition: background 0.2s;
+}
+
+.chat-entry:hover {
+  background-color: #30363d;
+}
+
+/* MAIN CHAT AREA */
+.chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #0d1117;
+  height: 100vh;
+}
+
+.chat-header {
+  padding: 20px 32px;
+  border-bottom: 1px solid #30363d;
+  background-color: #161b22;
+}
+
+.chat-header h1 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #e1b20e;
+}
+
+/* CHAT BOX */
 .chat-box {
   flex: 1;
-  padding: 20px;
+  padding: 20px 32px;
   overflow-y: auto;
-  background-color: #f4f6f8;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-.chat-message {
-  max-width: 80%;
+/* MENSAGEM EXEMPLO (opcional para testes) */
+.mensagem {
+  background-color: #1c2128;
   padding: 12px 16px;
-  border-radius: 18px;
-  font-size: 14px;
-  line-height: 1.5;
-  word-wrap: break-word;
-  animation: fadeIn 0.3s ease-in-out;
+  border-radius: 10px;
+  max-width: 70%;
 }
 
-.user {
-  background-color: #c8f7c5;
-  color: #065f46;
-  align-self: flex-end;
-  border-bottom-right-radius: 4px;
-}
-
-.bot {
-  background-color: #e0e0e0;
-  color: #333;
-  align-self: flex-start;
-  border-bottom-left-radius: 4px;
-}
-
-form {
+/* FORMULÁRIO */
+.chat-form {
   display: flex;
-  padding: 16px;
-  background-color: #ffffff;
-  border-top: 1px solid #ccc;
+  padding: 16px 32px;
+  border-top: 1px solid #30363d;
+  background-color: #161b22;
 }
 
-input[type="text"] {
+.chat-form input {
   flex: 1;
   padding: 12px 16px;
-  border-radius: 30px;
-  border: 1px solid #ccc;
-  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  margin-right: 12px;
+  font-size: 1rem;
+  background-color: #21262d;
+  color: #f0f0f0;
   outline: none;
-  transition: 0.2s border-color;
 }
 
-input[type="text"]:focus {
-  border-color: #38b000;
+.chat-form input::placeholder {
+  color: #999;
 }
 
-.enviar {
-  margin-left: 10px;
-  padding: 0 18px;
-  font-size: 18px;
-  background-color: #38b000;
+.chat-form .enviar {
+  background-color: #e1b20e;
   border: none;
-  border-radius: 50%;
-  color: white;
+  padding: 0 20px;
+  border-radius: 8px;
+  color: #000;
+  font-weight: bold;
+  font-size: 1.1rem;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background 0.3s;
 }
 
-.enviar:hover {
-  background-color: #70e000;
-}
-.voltar{
-  background: none;
-  border: none;
-  color: white;
+.chat-form .enviar:hover {
+  background-color: #f4c430;
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* SCROLLBAR ESTILIZADA */
+.chat-box::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+  background: #2c313a;
+  border-radius: 8px;
 }

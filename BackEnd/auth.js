@@ -47,6 +47,10 @@ if (document.getElementById('entrada')) {
     if (resposta.sucesso) {
       document.getElementById('login-msg').innerText = 'Login bem-sucedido!';
       document.getElementById('login-msg').style.color = 'green';
+
+      // Salvar o e-mail do usuário no localStorage
+      localStorage.setItem('userEmail', username);
+
       setTimeout(() => {
         window.location.href = '../FrontEnd/index.html';
       }, 1000);
@@ -69,4 +73,28 @@ if (document.getElementById('entrada')) {
       });
     }
   });
+}
+// Recuperação de senha
+if (document.getElementById('recuperar')) {       
+  document.getElementById('recuperar').onclick = async () => {
+    const email = document.getElementById('email').value;
+
+    if (!email) {
+      document.getElementById('rec-msg').innerText = 'Preencha o campo de e-mail.';
+      return;
+    }
+
+    const resposta = await window.api.recuperarSenha(email);
+
+    if (resposta.sucesso) {
+      document.getElementById('rec-msg').innerText = 'Código enviado para o e-mail.';
+      document.getElementById('rec-msg').style.color = 'green';
+      setTimeout(() => {
+        window.location.href = `resetar.html?email=${encodeURIComponent(email)}`;
+      }, 1000);
+    } else {
+      document.getElementById('rec-msg').innerText = resposta.erro;
+      document.getElementById('rec-msg').style.color = 'red';
+    }
+  };
 }
