@@ -93,3 +93,22 @@ body {
   color: #8b949e;
   min-height: 20px;
 }
+
+/* Link para login */
+.auth-box p {
+  font-size: 0.9rem;
+  color: #8b949e;
+  text-align: center;
+}
+
+.auth-box p a {
+  color: #e1b20e;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+
+.auth-box p a:hover {
+  color: #f4c430;
+  text-decoration: underline;
+}

@@ -153,3 +153,27 @@ aside {
   background: #2c313a;
   border-radius: 8px;
 }
+
+.btn-voltar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: none;
+  color: #e1b20e;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-voltar i {
+  font-size: 1.2rem;
+}
+
+.btn-voltar:hover {
+  background-color: #f4c430;
+  color: #000;
+}

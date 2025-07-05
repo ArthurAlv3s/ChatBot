@@ -1,11 +1,25 @@
+/* Reset global e correções */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  background-color: #0d1117; /* Fundo escuro total */
+  font-family: Arial, sans-serif;
+  overflow: hidden; /* remove possíveis scrolls indesejados */
+}
+
 /* Container da tela de login */
 .login-container {
-  flex: 1;
-  background-color: #0d1117;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-color: #0d1117;
+  flex: 1;
 }
 
 /* Caixa central do login */
@@ -100,11 +114,6 @@
   text-decoration: underline;
 }
 
-
-/* Container da tela de login permanece igual */
-
-/* ...seu css atual... */
-
 /* Container dos botões extras */
 .login-links {
   display: flex;
@@ -131,4 +140,3 @@
   background-color: #f4c430;
   color: #000;
 }
-
