@@ -118,6 +118,7 @@ ipcMain.handle('registrar', async (event, { username, senha }) => {
   }
 });
 // ========== salvar mensagens ===============
+// ========== salvar mensagens ===============
 ipcMain.handle('salvarMensagem', async (event, mensagem) => {
   try {
     await knex('messages').insert({
@@ -126,6 +127,7 @@ ipcMain.handle('salvarMensagem', async (event, mensagem) => {
       sender: mensagem.sender,
       favorita: mensagem.favorita || 0,
       timestamp: new Date(),
+      conversa_id: mensagem.conversa_id || null  // <-- ADICIONADO AQUI
     });
     return { sucesso: true };
   } catch (err) {

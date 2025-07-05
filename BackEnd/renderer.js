@@ -25,9 +25,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (categoria === 'futebol') {
       const resposta = await window.api.responderPergunta(pergunta);
 
-      // Salvar no banco
-      await window.api.salvarMensagem({ email, content: pergunta, sender: 'usuario' });
-      await window.api.salvarMensagem({ email, content: resposta, sender: 'chatbol' });
+      // Criar ID único para a conversa
+      const conversaId = Date.now().toString();
+
+      // Salvar no banco com mesmo conversa_id
+      await window.api.salvarMensagem({ email, content: pergunta, sender: 'usuario', conversa_id: conversaId });
+      await window.api.salvarMensagem({ email, content: resposta, sender: 'chatbol', conversa_id: conversaId });
 
       adicionarMensagem('ChatBol', resposta);
       carregarConversasLaterais(); // Atualiza menu lateral
@@ -53,29 +56,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const mensagens = await window.api.getMensagensPorEmail(email);
     mensagensSalvas = mensagens;
 
-    const assuntos = new Set();
+    const conversasUnicas = new Map();
 
     listaConversas.innerHTML = '';
 
     mensagens.forEach(msg => {
-      const assunto = extrairAssunto(msg.content);
+      if (!msg.conversa_id) return; // ignora se não tiver ID
 
-      if (!assuntos.has(assunto)) {
-        assuntos.add(assunto);
-
-        const div = document.createElement('div');
-        div.classList.add('chat-entry');
-        div.textContent = assunto;
-        div.addEventListener('click', () => carregarConversaCompleta(assunto));
-        listaConversas.appendChild(div);
+      if (!conversasUnicas.has(msg.conversa_id)) {
+        conversasUnicas.set(msg.conversa_id, msg.content); // salva a primeira mensagem
       }
     });
+
+    for (const [id, texto] of conversasUnicas.entries()) {
+      const div = document.createElement('div');
+      div.classList.add('chat-entry');
+      div.textContent = extrairAssunto(texto);
+      div.addEventListener('click', () => carregarConversaCompleta(id));
+      listaConversas.appendChild(div);
+    }
   }
 
-  // Carrega mensagens na tela do chat filtradas por assunto
-  function carregarConversaCompleta(assunto) {
+  // Carrega mensagens na tela do chat filtradas por conversa_id
+  function carregarConversaCompleta(conversaId) {
     chat.innerHTML = '';
-    const mensagens = mensagensSalvas.filter(msg => extrairAssunto(msg.content) === assunto);
+    const mensagens = mensagensSalvas.filter(msg => msg.conversa_id === conversaId);
     mensagens.forEach(msg => {
       adicionarMensagem(msg.sender === 'usuario' ? 'Você' : 'ChatBol', msg.content);
     });
