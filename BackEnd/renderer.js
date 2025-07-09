@@ -29,8 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const conversaId = Date.now().toString();
 
       // Salvar no banco com mesmo conversa_id
-      await window.api.salvarMensagem({ email, content: pergunta, sender: 'usuario', conversa_id: conversaId });
-      await window.api.salvarMensagem({ email, content: resposta, sender: 'chatbol', conversa_id: conversaId });
+      await window.api.salvarMensagem({ email, content: pergunta, sender: 'user', conversa_id: conversaId });
+      await window.api.salvarMensagem({ email, content: resposta, sender: 'bot', conversa_id: conversaId });
 
       adicionarMensagem('ChatBol', resposta);
       carregarConversasLaterais(); // Atualiza menu lateral

@@ -74,7 +74,7 @@ CREATE TABLE messages (
   FOREIGN KEY (user_email) REFERENCES users(email)
 );
 ALTER TABLE messages ADD COLUMN favorita TINYINT DEFAULT 0;
-
+ALTER TABLE messages ADD COLUMN conversa_id TEXT;
 
 INSERT INTO games (home_team, away_team, home_score, away_score, game_date, status)
 VALUES ('Team A', 'Team B', 2, 1, '2025-05-28 20:00:00', 'finished');
