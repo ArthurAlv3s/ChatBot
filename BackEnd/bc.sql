@@ -52,6 +52,7 @@ CREATE TABLE users (
   id INT AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(255) NOT NULL,
   password_hash VARCHAR(255) NOT NULL,
+
   UNIQUE(email)
 );
 CREATE TABLE password_resets (
@@ -75,6 +76,7 @@ CREATE TABLE messages (
 );
 ALTER TABLE messages ADD COLUMN favorita TINYINT DEFAULT 0;
 ALTER TABLE messages ADD COLUMN conversa_id TEXT;
+ALTER TABLE users ADD COLUMN registro_token VARCHAR(255) NULL;
 
 INSERT INTO games (home_team, away_team, home_score, away_score, game_date, status)
 VALUES ('Team A', 'Team B', 2, 1, '2025-05-28 20:00:00', 'finished');

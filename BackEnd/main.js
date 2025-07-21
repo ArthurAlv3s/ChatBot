@@ -8,7 +8,6 @@ const cron = require('node-cron');
 require('dotenv').config();
 
 const { API_KEY, EMAIL_SENDER, EMAIL_PASSWORD } = process.env;
-
 const knex = require('./knexfile');
 const { classificarPergunta, responderPergunta: responderGemini } = require('./gemini');
 const { inserirTimes } = require('./futebolAPI');
@@ -16,7 +15,6 @@ const { inserirTimes } = require('./futebolAPI');
 const usersFile = path.join(__dirname, 'usuarios.json');
 let tentativas = {};
 
-// Configuração global do transporter para e-mails
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -33,7 +31,6 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
     },
   });
-
   win.loadFile('../FrontEnd/login.html');
 }
 
@@ -48,7 +45,7 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
 
-// ========== LOGIN ==========
+// Login
 ipcMain.handle('login', async (event, { username, senha }) => {
   if (!tentativas[username]) tentativas[username] = 0;
 
@@ -56,10 +53,13 @@ ipcMain.handle('login', async (event, { username, senha }) => {
     return { sucesso: false, erro: 'Usuário bloqueado por tentativas inválidas' };
   }
 
-  // Primeiro tenta no banco SQL
   try {
     const usuarioSQL = await knex('users').where('email', username).first();
     if (usuarioSQL) {
+      if (usuarioSQL.status !== 'verificado') {
+        return { sucesso: false, erro: 'Conta ainda não verificada via 2FA.' };
+      }
+
       const senhaCorreta = await bcrypt.compare(senha, usuarioSQL.password_hash);
       if (senhaCorreta) {
         tentativas[username] = 0;
@@ -73,7 +73,6 @@ ipcMain.handle('login', async (event, { username, senha }) => {
     console.error('Erro ao verificar login no banco de dados:', err);
   }
 
-  // Se não encontrou no banco, tenta no arquivo JSON
   let users = [];
   if (fs.existsSync(usersFile)) {
     users = JSON.parse(fs.readFileSync(usersFile));
@@ -95,69 +94,63 @@ ipcMain.handle('login', async (event, { username, senha }) => {
   }
 });
 
-// ========== REGISTRO ==========
+// Registro com 2FA
 ipcMain.handle('registrar', async (event, { username, senha }) => {
   try {
-    // Verifica no banco SQL
     const usuarioExistenteSQL = await knex('users').where('email', username).first();
     if (usuarioExistenteSQL) {
       return { sucesso: false, erro: 'Usuário já existe no banco de dados' };
     }
 
-    
-    const hash = await bcrypt.hash(senha, 10);
+    const codigo2FA = crypto.randomBytes(3).toString('hex');
+    const expira = new Date(Date.now() + 5 * 60 * 1000);
 
-    // Insere no banco SQL
-    await knex('users').insert({ email: username, password_hash: hash });
+    await knex('users').insert({
+      email: username,
+      password_hash: await bcrypt.hash(senha, 10),
+      status: 'aguardando_verificacao',
+      codigo_2fa: codigo2FA,
+      expira_em: expira,
+    });
 
+    await transporter.sendMail({
+      from: `"Chatbot" <${EMAIL_SENDER}>`,
+      to: username,
+      subject: 'Código de verificação',
+      text: `Seu código de verificação é: ${codigo2FA}`,
+    });
 
-    return { sucesso: true };
+    return { sucesso: true, mensagem: 'Usuário registrado. Verifique seu e-mail para ativar a conta.' };
   } catch (err) {
     console.error('Erro ao registrar usuário:', err);
     return { sucesso: false, erro: 'Erro ao registrar usuário' };
   }
 });
-// ========== salvar mensagens ===============
-// ========== salvar mensagens ===============
-ipcMain.handle('salvarMensagem', async (event, mensagem) => {
+
+
+ipcMain.handle('verificar2FA', async (event, { email, codigo }) => {
   try {
-    await knex('messages').insert({
-      user_email: mensagem.email,
-      content: mensagem.content,
-      sender: mensagem.sender,
-      favorita: mensagem.favorita || 0,
-      timestamp: new Date(),
-      conversa_id: mensagem.conversa_id || null  // <-- ADICIONADO AQUI
-    });
-    return { sucesso: true };
+    const usuario = await knex('users').where({ email }).first();
+
+    if (usuario && usuario.codigo_2fa === codigo && new Date(usuario.expira_em) > new Date()) {
+      await knex('users').where({ email }).update({
+        codigo_2fa: null,
+        expira_em: null,
+      });
+      return { sucesso: true };
+    } else {
+      return { sucesso: false, erro: 'Código inválido ou expirado' };
+    }
   } catch (err) {
-    console.error('Erro ao salvar mensagem:', err);
-    return { sucesso: false, erro: 'Erro ao salvar mensagem' };
+    console.error('Erro ao verificar código 2FA:', err);
+    return { sucesso: false, erro: 'Erro interno' };
   }
 });
-
-// Buscar mensagens anteriores
-ipcMain.handle('getMensagensPorEmail', async (event, email) => {
-  try {
-    const mensagens = await knex('messages')
-      .where('user_email', email)
-      .orderBy('timestamp', 'asc');
-    return mensagens;
-  } catch (err) {
-    console.error('[ERRO] Ao buscar mensagens:', err);
-    return [];
-  }
-});
-
-// ========== 2FA ==========
-function gerarCodigo() {
-  return Math.floor(100000 + Math.random() * 900000).toString();
-}
 
 ipcMain.handle('enviarCodigo2FA', async (event, email) => {
   try {
     const codigo = gerarCodigo();
-    const expira = new Date(Date.now() + 5 * 60 * 1000); // 5 minutos
+    const expira = new Date(Date.now() + 5 * 60 * 1000);
 
     await knex('users').where({ email }).update({
       codigo_2fa: codigo,
@@ -178,36 +171,13 @@ ipcMain.handle('enviarCodigo2FA', async (event, email) => {
   }
 });
 
-ipcMain.handle('verificar2FA', async (event, { email, codigo }) => {
-  try {
-    const usuario = await knex('users').where({ email }).first();
-
-    if (
-      usuario &&
-      usuario.codigo_2fa === codigo &&
-      new Date(usuario.expira_em) > new Date()
-    ) {
-      await knex('users').where({ email }).update({
-        codigo_2fa: null,
-        expira_em: null,
-      });
-      return { sucesso: true };
-    }
-    return { sucesso: false, erro: 'Código inválido ou expirado' };
-  } catch (err) {
-    console.error('Erro ao verificar código 2FA:', err);
-    return { sucesso: false, erro: 'Erro interno' };
-  }
-});
-
-// ========== Recuperar Senha ==========
 ipcMain.handle('recuperarSenha', async (event, email) => {
   try {
     const user = await knex('users').where({ email }).first();
     if (!user) return { sucesso: false, erro: 'Usuário não encontrado' };
 
     const codigo = gerarCodigo();
-    const expires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutos
+    const expires = new Date(Date.now() + 10 * 60 * 1000);
 
     await knex('password_resets').insert({
       email,
@@ -229,7 +199,6 @@ ipcMain.handle('recuperarSenha', async (event, email) => {
   }
 });
 
-// ========== Resetar Senha ==========
 ipcMain.handle('resetarSenha', async (event, { token, novaSenha }) => {
   try {
     const reset = await knex('password_resets')
@@ -240,9 +209,7 @@ ipcMain.handle('resetarSenha', async (event, { token, novaSenha }) => {
     if (!reset) return { sucesso: false, erro: 'Código inválido ou expirado' };
 
     const hash = await bcrypt.hash(novaSenha, 10);
-
     await knex('users').where({ email: reset.email }).update({ password_hash: hash });
-
     await knex('password_resets').where({ token }).del();
 
     return { sucesso: true };
@@ -252,7 +219,35 @@ ipcMain.handle('resetarSenha', async (event, { token, novaSenha }) => {
   }
 });
 
-// ========== Classificar Pergunta ==========
+ipcMain.handle('salvarMensagem', async (event, mensagem) => {
+  try {
+    await knex('messages').insert({
+      user_email: mensagem.email,
+      content: mensagem.content,
+      sender: mensagem.sender,
+      favorita: mensagem.favorita || 0,
+      timestamp: new Date(),
+      conversa_id: mensagem.conversa_id || null
+    });
+    return { sucesso: true };
+  } catch (err) {
+    console.error('Erro ao salvar mensagem:', err);
+    return { sucesso: false, erro: 'Erro ao salvar mensagem' };
+  }
+});
+
+ipcMain.handle('getMensagensPorEmail', async (event, email) => {
+  try {
+    const mensagens = await knex('messages')
+      .where('user_email', email)
+      .orderBy('timestamp', 'asc');
+    return mensagens;
+  } catch (err) {
+    console.error('[ERRO] Ao buscar mensagens:', err);
+    return [];
+  }
+});
+
 ipcMain.handle('classificarPergunta', async (event, pergunta) => {
   try {
     const categoria = await classificarPergunta(pergunta);
@@ -263,30 +258,22 @@ ipcMain.handle('classificarPergunta', async (event, pergunta) => {
   }
 });
 
-// ========== Responder Pergunta com Cache no Banco ==========
 ipcMain.handle('responderPergunta', async (event, pergunta) => {
   try {
-    console.log('[INFO] Verificando pergunta no banco:', pergunta);
-
     const consultaExistente = await knex('queries')
       .where('user_query', pergunta)
       .first();
 
     if (consultaExistente) {
-      console.log('[INFO] Resposta encontrada no banco de dados.');
       return consultaExistente.response;
     }
 
-    console.log('[INFO] Pergunta não encontrada no banco, gerando resposta...');
     const respostaGerada = await responderGemini(pergunta);
 
-    console.log('[INFO] Salvando nova resposta no banco...');
     await knex('queries').insert({
       user_query: pergunta,
       response: respostaGerada,
     });
-
-    console.log('[OK] Resposta salva com sucesso no banco.');
 
     return respostaGerada;
   } catch (err) {
@@ -295,8 +282,34 @@ ipcMain.handle('responderPergunta', async (event, pergunta) => {
   }
 });
 
-// ========== Atualizar Dados dos Times Periodicamente ==========
 cron.schedule('0 0 * * *', () => {
   console.log('[INFO] Atualizando dados dos times...');
   inserirTimes(knex);
+});
+
+function gerarCodigo() {
+  return Math.floor(100000 + Math.random() * 900000).toString();
+}
+// Finaliza o registro após verificação 2FA
+ipcMain.handle('registrarFinalizado', async (event, email) => {
+  try {
+    const usuario = await knex('users').where({ email }).first();
+
+    if (!usuario) {
+      return { sucesso: false, erro: 'Usuário não encontrado' };
+    }
+
+    if (usuario.status !== 'aguardando_verificacao') {
+      return { sucesso: false, erro: 'Usuário já verificado ou em status inválido' };
+    }
+
+    await knex('users').where({ email }).update({
+      status: 'verificado',
+    });
+
+    return { sucesso: true };
+  } catch (err) {
+    console.error('Erro ao finalizar registro:', err);
+    return { sucesso: false, erro: 'Erro ao finalizar registro' };
+  }
 });

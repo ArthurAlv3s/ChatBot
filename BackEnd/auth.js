@@ -1,6 +1,4 @@
-// auth.js
-
-// Registro com 2FA
+// REGISTRO COM 2FA
 if (document.getElementById('enviar')) {
   document.getElementById('enviar').onclick = async () => {
     const username = document.getElementById('new-email').value;
@@ -11,15 +9,12 @@ if (document.getElementById('enviar')) {
       return;
     }
 
-    // Tenta registrar o usuário
     const respostaRegistro = await window.api.registrar({ username, senha });
 
     if (respostaRegistro.sucesso) {
-      // Envia o código 2FA para o email do usuário
       const resposta2FA = await window.api.enviarCodigo2FA(username);
 
       if (resposta2FA.sucesso) {
-        // Redireciona para a página de verificação, passando o email pela URL
         window.location.href = `verificar.html?email=${encodeURIComponent(username)}`;
       } else {
         document.getElementById('reg-msg').innerText = 'Erro ao enviar código 2FA.';
@@ -30,7 +25,7 @@ if (document.getElementById('enviar')) {
   };
 }
 
-// Login
+// LOGIN
 if (document.getElementById('entrada')) {
   const loginHandler = async () => {
     const username = document.getElementById('email').value;
@@ -47,22 +42,26 @@ if (document.getElementById('entrada')) {
     if (resposta.sucesso) {
       document.getElementById('login-msg').innerText = 'Login bem-sucedido!';
       document.getElementById('login-msg').style.color = 'green';
-
-      // Salvar o e-mail do usuário no localStorage
       localStorage.setItem('userEmail', username);
-
       setTimeout(() => {
         window.location.href = '../FrontEnd/index.html';
       }, 1000);
     } else {
-      document.getElementById('login-msg').innerText = resposta.erro;
-      document.getElementById('login-msg').style.color = 'red';
+      // Se o erro for "Conta ainda não verificada via 2FA." mostra link para verificar
+      if (resposta.erro === 'Conta ainda não verificada via 2FA.') {
+        document.getElementById('login-msg').innerHTML = `
+          ${resposta.erro} 
+          <a href="verificar.html?email=${encodeURIComponent(username)}" style="margin-left: 8px;">Verificar 2FA</a>
+        `;
+      } else {
+        document.getElementById('login-msg').innerText = resposta.erro;
+      }
+      document.getElementById('login-msg').style.color = '#e1b20e';
     }
   };
 
   document.getElementById('entrada').onclick = loginHandler;
 
-  // Permitir login com Enter nos campos de email e senha
   ['email', 'password'].forEach(id => {
     const input = document.getElementById(id);
     if (input) {
@@ -74,8 +73,9 @@ if (document.getElementById('entrada')) {
     }
   });
 }
-// Recuperação de senha
-if (document.getElementById('recuperar')) {       
+
+// RECUPERAÇÃO DE SENHA
+if (document.getElementById('recuperar')) {
   document.getElementById('recuperar').onclick = async () => {
     const email = document.getElementById('email').value;
 
